@@ -323,7 +323,10 @@ nslookup disney.com</code></pre>
 </p>
 
 <p align="center">
-  <img src="images/resource-cleanup.png" alt="Resource Cleanup" width="90%" />
-  
-  <img src="images/resource-cleanup-all.png" alt="Resource Cleanup" width="90%" />
+  <img src="images/resource-cleanup.png" width="90%">
+</p>
+
+<p align="center">
+  <img src="images/resource-cleanup-all.png" width="90%">
+</p>
 </p>
