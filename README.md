@@ -85,7 +85,7 @@
 </p>
 
 <p align="center">
-  <img src="images/vm-setup.png" alt="Azure VM Setup" width="90%" />
+  <img src="images/vm-setup.png" alt="Azure VM Setup" width="80%" />
 </p>
 
 <hr>
@@ -97,8 +97,8 @@
   <li>Captured live network traffic</li>
   <li>Generated ICMP traffic by:
     <ul>
-      <li>Pinging the Ubuntu VM (private IP)</li>
-      <li>Pinging a public website (google.com)</li>
+      <li>Pinging the Ubuntu VM using its private IP address</li>
+      <li>Pinging a public website such as google.com</li>
     </ul>
   </li>
 </ul>
@@ -108,7 +108,7 @@
 </p>
 
 <p align="center">
-  <img src="images/icmp-traffic.png" alt="ICMP Traffic" width="90%" />
+  <img src="images/icmp-traffic.png" alt="ICMP Traffic" width="80%" />
 </p>
 
 <hr>
@@ -116,31 +116,40 @@
 <h3>3. Network Security Group Testing</h3>
 
 <ul>
-  <li>Initiated a continuous ping from the Windows VM to the Ubuntu VM</li>
+  <li>Started a continuous ping from the Windows VM to the Ubuntu VM</li>
   <li>Applied an NSG rule to block inbound ICMP traffic</li>
-</ul>
-
-<p>Observed behavior:</p>
-
-<ul>
-  <li>Ping requests continued</li>
-  <li>Replies stopped</li>
-  <li>Wireshark showed one-way traffic</li>
-</ul>
-
-<p>After re-enabling ICMP:</p>
-
-<ul>
-  <li>Replies resumed immediately</li>
-  <li>Connectivity was restored</li>
+  <li>Observed that requests continued while replies stopped</li>
+  <li>Re-enabled ICMP traffic and confirmed that replies resumed</li>
 </ul>
 
 <p>
-  This demonstrated how NSGs control traffic flow without affecting outbound requests.
+  Blocking ICMP stopped replies but not outgoing requests, creating one-way communication. Re-enabling the rule restored normal connectivity.
+</p>
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="images/ping-running.png" alt="Ping Working Before NSG Rule" width="100%"><br>
+      <sub>Before NSG Rule (Working)</sub>
+    </td>
+    <td align="center">
+      <img src="images/ping-fail.png" alt="Ping Failing After NSG Rule" width="100%"><br>
+      <sub>After NSG Rule (Blocked)</sub>
+    </td>
+  </tr>
+</table>
+
+<br>
+
+<p align="center">
+  <img src="images/nsg-block.png" alt="NSG Blocking ICMP" width="80%" />
 </p>
 
 <p align="center">
-  <img src="images/nsg-block.png" alt="NSG Blocking ICMP" width="90%" />
+  <img src="images/ping-restored.png" alt="Ping Restored After Re-enabling ICMP" width="80%" />
+</p>
+<p align="center">
+  <sub>Connectivity restored after re-enabling ICMP.</sub>
 </p>
 
 <hr>
@@ -158,7 +167,7 @@
 </p>
 
 <p align="center">
-  <img src="images/ssh-traffic.png" alt="SSH Traffic" width="90%" />
+  <img src="images/ssh-traffic.png" alt="SSH Traffic" width="80%" />
 </p>
 
 <hr>
@@ -177,7 +186,7 @@
 </p>
 
 <p align="center">
-  <img src="images/dhcp-traffic.png" alt="DHCP Traffic" width="90%" />
+  <img src="images/dhcp-traffic.png" alt="DHCP Traffic" width="80%" />
 </p>
 
 <hr>
@@ -197,7 +206,7 @@ nslookup disney.com</code></pre>
 </p>
 
 <p align="center">
-  <img src="images/dns-traffic.png" alt="DNS Traffic" width="90%" />
+  <img src="images/dns-traffic.png" alt="DNS Traffic" width="80%" />
 </p>
 
 <hr>
@@ -209,11 +218,11 @@ nslookup disney.com</code></pre>
 </ul>
 
 <p>
-  I observed continuous traffic due to the nature of Remote Desktop transmitting a live session between systems.
+  I observed continuous traffic because Remote Desktop constantly transmits display, input, and session data between systems.
 </p>
 
 <p align="center">
-  <img src="images/rdp-traffic.png" alt="RDP Traffic" width="90%" />
+  <img src="images/rdp-traffic.png" alt="RDP Traffic" width="80%" />
 </p>
 
 <hr>
@@ -268,7 +277,7 @@ nslookup disney.com</code></pre>
 
 <ul>
   <li>NSGs function as cloud-level firewalls controlling inbound and outbound traffic</li>
-  <li>Blocking traffic at the network level does not stop packets from being sent—only from being received</li>
+  <li>Blocking traffic at the network level does not stop packets from being sent, only from being received</li>
   <li>Misconfigured rules can silently block communication without obvious errors</li>
   <li>Understanding traffic patterns helps identify abnormal or malicious activity</li>
 </ul>
@@ -323,10 +332,5 @@ nslookup disney.com</code></pre>
 </p>
 
 <p align="center">
-  <img src="images/resource-cleanup.png" width="90%">
-</p>
-
-<p align="center">
-  <img src="images/resource-cleanup-all.png" width="90%">
-</p>
+  <img src="images/resource-cleanup-all.png" alt="Resource Cleanup" width="80%" />
 </p>
