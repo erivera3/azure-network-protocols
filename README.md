@@ -85,7 +85,7 @@
 </p>
 
 <p align="center">
-  <img src="images/vm-setup.png" alt="Azure VM Setup" width="700" />
+  <img src="images/vm-setup.png" alt="Azure VM Setup" width="80%" />
 </p>
 
 <hr>
@@ -108,7 +108,7 @@
 </p>
 
 <p align="center">
-  <img src="images/icmp-traffic.png" alt="ICMP Traffic" width="700" />
+  <img src="images/icmp-traffic.png" alt="ICMP Traffic" width="80%" />
 </p>
 
 <hr>
@@ -140,7 +140,7 @@
 </p>
 
 <p align="center">
-  <img src="images/nsg-block.png" alt="NSG Blocking ICMP" width="700" />
+  <img src="images/nsg-block.png" alt="NSG Blocking ICMP" width="80%" />
 </p>
 
 <hr>
@@ -158,7 +158,7 @@
 </p>
 
 <p align="center">
-  <img src="images/ssh-traffic.png" alt="SSH Traffic" width="700" />
+  <img src="images/ssh-traffic.png" alt="SSH Traffic" width="80%" />
 </p>
 
 <hr>
@@ -177,7 +177,7 @@
 </p>
 
 <p align="center">
-  <img src="images/dhcp-traffic.png" alt="DHCP Traffic" width="700" />
+  <img src="images/dhcp-traffic.png" alt="DHCP Traffic" width="80%" />
 </p>
 
 <hr>
@@ -197,7 +197,7 @@ nslookup disney.com</code></pre>
 </p>
 
 <p align="center">
-  <img src="images/dns-traffic.png" alt="DNS Traffic" width="700" />
+  <img src="images/dns-traffic.png" alt="DNS Traffic" width="80%" />
 </p>
 
 <hr>
@@ -213,7 +213,7 @@ nslookup disney.com</code></pre>
 </p>
 
 <p align="center">
-  <img src="images/rdp-traffic.png" alt="RDP Traffic" width="700" />
+  <img src="images/rdp-traffic.png" alt="RDP Traffic" width="80%" />
 </p>
 
 <hr>
@@ -323,5 +323,5 @@ nslookup disney.com</code></pre>
 </p>
 
 <p align="center">
-  <img src="images/resource-cleanup.png" alt="Resource Cleanup" width="700" />
+  <img src="images/resource-cleanup.png" alt="Resource Cleanup" width="80%" />
 </p>
