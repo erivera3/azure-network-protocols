@@ -324,5 +324,6 @@ nslookup disney.com</code></pre>
 
 <p align="center">
   <img src="images/resource-cleanup.png" alt="Resource Cleanup" width="90%" />
-  <img src="images/resource-cleanupall.png" alt="Resource Cleanup" width="90%" />
+  
+  <img src="images/resource-cleanup-all.png" alt="Resource Cleanup" width="90%" />
 </p>
