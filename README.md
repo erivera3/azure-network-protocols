@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/project picture.png" alt="Azure VM Setup" width="80%" />
+  <img src="images/project picture.png" alt="Azure VM Setup" width="50%" />
 </p>
 
 <h1 align="center">Network Security Groups (NSGs) &amp; Traffic Inspection Between Azure Virtual Machines</h1>
