@@ -2,335 +2,255 @@
   <img src="images/project picture.png" alt="Azure VM Setup" width="40%" />
 </p>
 
-<h1 align="center">Network Security Groups (NSGs) &amp; Traffic Inspection Between Azure Virtual Machines</h1>
+<h1 align="center">Network Security Groups & Traffic Inspection (Packet-Level Analysis & Connectivity Control)</h1>
 
-<p>
-  This project demonstrates how to deploy Azure virtual machines, analyze real network traffic using Wireshark, and control communication using Network Security Groups (NSGs). The lab focuses on understanding how systems communicate and how security rules impact network behavior.
-</p>
+This project focuses on analyzing real network traffic between Azure virtual machines and validating how security rules impact system communication.
 
-<hr>
+The objective was not just to capture packets, but to use traffic analysis to diagnose, break, and restore connectivity under controlled conditions.
 
-<h2>🎯 Goals &amp; Objectives</h2>
+---
 
-<p>
-  The goal of this project was to build a working network environment in Azure and understand how traffic flows between systems at the packet level.
-</p>
+## 📌 Context
 
-<p>By the end of this lab, I aimed to:</p>
+Network communication depends on:
 
-<ul>
-  <li>Deploy multiple virtual machines in a shared network</li>
-  <li>Capture and analyze traffic using Wireshark</li>
-  <li>Observe key protocols (ICMP, SSH, DHCP, DNS, RDP)</li>
-  <li>Apply and test Network Security Group rules</li>
-  <li>Understand how security configurations affect connectivity</li>
-  <li>Improve troubleshooting through direct observation</li>
-</ul>
+- Protocol behavior (ICMP, SSH, DNS, DHCP, RDP)  
+- Network placement (VNet, subnet)  
+- Security controls (NSGs)  
 
-<hr>
+Failures at the network level often do not produce clear errors, making packet-level validation critical.
 
-<h2>📌 Overview</h2>
+---
 
-<p>
-  In this project, I created a Windows and Ubuntu virtual machine within the same Azure Virtual Network to simulate a basic network environment. Using Wireshark, I captured and analyzed traffic between the machines while generating different types of network activity.
-</p>
+## 🧰 Technologies Used
 
-<p>
-  I then modified Network Security Group rules to block and allow traffic, which demonstrated how cloud-level security controls influence communication between systems.
-</p>
+- Microsoft Azure (Virtual Machines)  
+- Network Security Groups (NSGs)  
+- Wireshark  
+- Remote Desktop Protocol (RDP)  
+- SSH  
+- PowerShell  
+- DNS  
+- DHCP  
+- ICMP  
 
-<hr>
+---
 
-<h2>🧰 Technologies Used</h2>
+## 💻 Environment
 
-<ul>
-  <li>Microsoft Azure (Virtual Machines)</li>
-  <li>Network Security Groups (NSGs)</li>
-  <li>Wireshark</li>
-  <li>Remote Desktop Protocol (RDP)</li>
-  <li>SSH</li>
-  <li>PowerShell</li>
-  <li>DNS</li>
-  <li>DHCP</li>
-  <li>ICMP</li>
-</ul>
+- Windows 10 Virtual Machine  
+- Ubuntu Virtual Machine  
+- Shared Azure Virtual Network  
+- Azure Subnet  
+- Network Security Group  
+- Wireshark installed on Windows VM  
 
-<hr>
+---
 
-<h2>💻 Environment</h2>
+## ⚙️ Implementation
 
-<ul>
-  <li>Windows 10 Virtual Machine</li>
-  <li>Ubuntu Virtual Machine</li>
-  <li>Azure Virtual Network (shared)</li>
-  <li>Azure Subnet</li>
-  <li>Network Security Group</li>
-  <li>Wireshark installed on the Windows VM</li>
-</ul>
+### 1. Infrastructure Setup
 
-<hr>
+**Problem:**  
+No controlled environment to test network behavior.
 
-<h2>⚙️ Implementation</h2>
+**Decision:**  
+Deploy Windows and Ubuntu VMs within the same VNet and subnet.
 
-<h3>1. Infrastructure Setup</h3>
-
-<ul>
-  <li>Created a Resource Group</li>
-  <li>Deployed Windows and Ubuntu virtual machines</li>
-  <li>Ensured both VMs were placed in the same Virtual Network and Subnet</li>
-</ul>
-
-<p>
-  This setup allowed communication over private IP addresses within a controlled environment.
-</p>
+**Result:**  
+- Systems able to communicate via private IP  
+- Environment ready for controlled testing  
 
 <p align="center">
-  <img src="images/vm-setup.png" alt="Azure VM Setup" width="90%" />
+  <img src="images/vm-setup.png" width="90%" />
 </p>
 
-<hr>
+---
 
-<h3>2. ICMP Traffic Observation</h3>
+### 2. Connectivity Validation (ICMP)
 
-<ul>
-  <li>Installed Wireshark on the Windows VM</li>
-  <li>Captured live network traffic</li>
-  <li>Generated ICMP traffic by:
-    <ul>
-      <li>Pinging the Ubuntu VM using its private IP address</li>
-      <li>Pinging a public website such as google.com</li>
-    </ul>
-  </li>
-</ul>
+**Problem:**  
+Need to confirm baseline communication between systems.
 
-<p>
-  I observed successful request and reply packets, confirming connectivity.
-</p>
+**Decision:**  
+Generate ICMP traffic using continuous ping.
+
+**Result:**  
+- Successful request/reply cycles observed  
+- Connectivity confirmed at network level  
 
 <p align="center">
-  <img src="images/icmp-traffic.png" alt="ICMP Traffic" width="90%" />
+  <img src="images/icmp-traffic.png" width="90%" />
 </p>
 
-<hr>
+---
 
-<h3>3. Network Security Group Testing</h3>
+### 3. NSG Rule Enforcement (Critical Test)
 
-<ul>
-  <li>Started a continuous ping from the Windows VM to the Ubuntu VM</li>
-  <li>Applied an NSG rule to block inbound ICMP traffic</li>
-  <li>Observed that requests continued while replies stopped</li>
-  <li>Re-enabled ICMP traffic and confirmed that replies resumed</li>
-</ul>
+**Problem:**  
+Need to validate how security rules affect live traffic.
 
-<p>
-  Blocking ICMP stopped replies but not outgoing requests, creating one-way communication. Re-enabling the rule restored normal connectivity.
-</p>
+**Decision:**  
+- Apply NSG rule blocking inbound ICMP  
+- Maintain continuous ping during change  
+
+**Result:**  
+- Requests continued  
+- Replies stopped  
+- Created one-way communication  
+
+**Insight:**  
+Outbound traffic does not guarantee inbound response.  
+Security rules can silently break communication.
 
 <table align="center">
   <tr>
     <td align="center">
-      <img src="images/ping-running.png" alt="Ping Working Before NSG Rule" width="100%"><br>
-      <sub>Before NSG Rule (Working)</sub>
+      <img src="images/ping-running.png" width="100%"><br>
+      <sub>Working (Before Rule)</sub>
     </td>
     <td align="center">
-      <img src="images/ping-fail.png" alt="Ping Failing After NSG Rule" width="100%"><br>
-      <sub>After NSG Rule (Blocked)</sub>
+      <img src="images/ping-fail.png" width="100%"><br>
+      <sub>Blocked (After Rule)</sub>
     </td>
   </tr>
 </table>
 
-<br>
-
 <p align="center">
-  <img src="images/nsg-block.png" alt="NSG Blocking ICMP" width="90%" />
+  <img src="images/nsg-block.png" width="90%" />
 </p>
 
 <p align="center">
-  <img src="images/ping-restored.png" alt="Ping Restored After Re-enabling ICMP" width="90%" />
-</p>
-<p align="center">
-  <sub>Connectivity restored after re-enabling ICMP.</sub>
+  <img src="images/ping-restored.png" width="90%" />
 </p>
 
-<hr>
+---
 
-<h3>4. SSH Traffic Observation</h3>
+### 4. SSH Traffic Analysis
 
-<ul>
-  <li>Filtered Wireshark for SSH traffic</li>
-  <li>Initiated an SSH session from Windows to Ubuntu</li>
-  <li>Executed commands within the session</li>
-</ul>
+**Problem:**  
+Need to observe secure communication behavior.
 
-<p>
-  I observed encrypted traffic on port 22, confirming secure remote communication.
-</p>
+**Decision:**  
+Initiate SSH session and filter traffic.
+
+**Result:**  
+- Encrypted traffic observed on port 22  
+- Verified secure session behavior  
 
 <p align="center">
-  <img src="images/ssh-traffic.png" alt="SSH Traffic" width="90%" />
+  <img src="images/ssh-traffic.png" width="90%" />
 </p>
 
-<hr>
+---
 
-<h3>5. DHCP Traffic Observation</h3>
+### 5. DHCP Behavior Validation
 
-<ul>
-  <li>Filtered Wireshark for DHCP traffic</li>
-  <li>Issued a new IP request using:</li>
-</ul>
+**Problem:**  
+Need to understand IP assignment process.
 
-<pre><code>ipconfig /renew</code></pre>
+**Decision:**  
+Trigger DHCP renewal and capture traffic.
 
-<p>
-  I observed DHCP request and response packets, demonstrating dynamic IP assignment.
-</p>
+**Result:**  
+- Observed request/offer/ack cycle  
+- Confirmed dynamic IP allocation  
 
 <p align="center">
-  <img src="images/dhcp-traffic.png" alt="DHCP Traffic" width="90%" />
+  <img src="images/dhcp-traffic.png" width="90%" />
 </p>
 
-<hr>
+---
 
-<h3>6. DNS Traffic Observation</h3>
+### 6. DNS Resolution Analysis
 
-<ul>
-  <li>Filtered Wireshark for DNS traffic</li>
-  <li>Used:</li>
-</ul>
+**Problem:**  
+Need to validate domain name resolution.
 
-<pre><code>nslookup google.com
-nslookup disney.com</code></pre>
+**Decision:**  
+Generate DNS queries using `nslookup`.
 
-<p>
-  I observed DNS queries and responses, showing how domain names are resolved to IP addresses.
-</p>
+**Result:**  
+- Query/response packets captured  
+- Confirmed resolution process  
 
 <p align="center">
-  <img src="images/dns-traffic.png" alt="DNS Traffic" width="90%" />
+  <img src="images/dns-traffic.png" width="90%" />
 </p>
 
-<hr>
+---
 
-<h3>7. RDP Traffic Observation</h3>
+### 7. RDP Traffic Behavior
 
-<ul>
-  <li>Filtered Wireshark for RDP traffic (<code>tcp.port == 3389</code>)</li>
-</ul>
+**Problem:**  
+Need to understand continuous session traffic.
 
-<p>
-  I observed continuous traffic because Remote Desktop constantly transmits display, input, and session data between systems.
-</p>
+**Decision:**  
+Filter for RDP traffic on port 3389.
+
+**Result:**  
+- Continuous traffic observed  
+- Confirmed persistent session communication  
 
 <p align="center">
-  <img src="images/rdp-traffic.png" alt="RDP Traffic" width="90%" />
+  <img src="images/rdp-traffic.png" width="90%" />
 </p>
 
-<hr>
+---
 
-<h2>🔍 Troubleshooting</h2>
+## 🔍 Key Failures & Observations
 
-<h3>ICMP Blocking Behavior</h3>
+### One-Way Communication (ICMP Block)
+- Cause: NSG blocked inbound traffic  
+- Effect: Requests sent, replies dropped  
+- Fix: Re-enabled rule  
 
-<ul>
-  <li><strong>Problem:</strong> Ping stopped receiving replies after applying the NSG rule</li>
-  <li><strong>Cause:</strong> Inbound ICMP traffic was blocked at the network level</li>
-  <li><strong>Fix:</strong> Re-enabled ICMP traffic in the NSG</li>
-</ul>
+### Protocol Differences
+- ICMP → request/reply  
+- SSH → encrypted session  
+- DHCP → broadcast  
+- DNS → query/response  
+- RDP → continuous stream  
 
-<p>
-  This demonstrated that traffic can still be sent even when responses are blocked.
-</p>
+---
 
-<h3>Protocol Visibility</h3>
+## 🧠 Decisions That Mattered
 
-<ul>
-  <li>Initially expected all traffic to behave similarly</li>
-  <li>Observed that each protocol has unique patterns:
-    <ul>
-      <li>ICMP: request/reply</li>
-      <li>SSH: encrypted session traffic</li>
-      <li>DHCP: broadcast-based communication</li>
-      <li>DNS: query/response</li>
-      <li>RDP: continuous stream</li>
-    </ul>
-  </li>
-</ul>
+- Used continuous ping to observe real-time impact  
+- Tested security changes while traffic was active  
+- Used Wireshark to validate behavior instead of assuming  
+- Focused on cause/effect rather than configuration alone  
 
-<p>
-  This reinforced the importance of protocol-specific analysis.
-</p>
+---
 
-<hr>
+## 🛡️ System Understanding
 
-<h2>🧠 Design Decisions</h2>
+- Security rules affect return traffic, not just initial communication  
+- Connectivity failures may not generate visible errors  
+- Packet analysis is required to validate assumptions  
+- Different protocols require different troubleshooting approaches  
 
-<ul>
-  <li>Placed both VMs in the same Virtual Network to enable internal communication</li>
-  <li>Used private IP addresses to simulate internal enterprise traffic</li>
-  <li>Used continuous ping to clearly observe changes when applying NSG rules</li>
-  <li>Used Wireshark instead of relying only on Azure tools to validate actual packet behavior</li>
-</ul>
+---
 
-<hr>
+## 📌 Key Lessons
 
-<h2>🛡️ Security Awareness</h2>
+- Network issues must be validated at the packet level  
+- Security controls can silently break communication  
+- Protocol behavior determines how issues appear  
+- Observing traffic is more reliable than assuming system behavior  
 
-<ul>
-  <li>NSGs function as cloud-level firewalls controlling inbound and outbound traffic</li>
-  <li>Blocking traffic at the network level does not stop packets from being sent, only from being received</li>
-  <li>Misconfigured rules can silently block communication without obvious errors</li>
-  <li>Understanding traffic patterns helps identify abnormal or malicious activity</li>
-</ul>
+---
 
-<hr>
+## Summary
 
-<h2>🌍 Real-World Relevance</h2>
+This project demonstrates the ability to diagnose and validate network behavior using real traffic rather than relying on configuration assumptions.
 
-<ul>
-  <li>Network Security Groups are widely used to control access between systems in cloud environments</li>
-  <li>Packet analysis tools like Wireshark are essential for diagnosing connectivity issues</li>
-  <li>Protocol-level understanding is critical for both IT support and cybersecurity roles</li>
-  <li>Troubleshooting requires validating assumptions with real data</li>
-</ul>
+Key outcomes:
 
-<hr>
+- Identified one-way communication caused by NSG rules  
+- Used packet capture to confirm protocol behavior  
+- Validated connectivity across multiple protocols  
+- Demonstrated how security controls impact real communication  
 
-<h2>📌 Lessons Learned</h2>
-
-<ul>
-  <li>Connectivity issues are not always obvious and require step-by-step validation</li>
-  <li>Blocking traffic can create one-way communication without clear error messages</li>
-  <li>Different protocols behave in fundamentally different ways</li>
-  <li>Observing real traffic provides deeper understanding than following configuration steps alone</li>
-  <li>Small configuration changes can significantly impact system behavior</li>
-</ul>
-
-<hr>
-
-<h2>💭 Key Takeaways</h2>
-
-<p>
-  Before this lab, I viewed networking primarily as configuration-based. This project showed that understanding actual traffic behavior is essential for diagnosing issues and validating system functionality.
-</p>
-
-<p>
-  By combining traffic visibility with security controls, I was able to better understand how communication between systems is established, interrupted, and restored.
-</p>
-
-<hr>
-
-<h2>🧹 Cleanup</h2>
-
-<ul>
-  <li>Closed the Remote Desktop session</li>
-  <li>Deleted the Resource Group</li>
-  <li>Verified that all resources were removed</li>
-</ul>
-
-<p>
-  This ensured no unnecessary cloud resources were left running.
-</p>
-
-<p align="center">
-  <img src="images/resource-cleanup-all.png" alt="Resource Cleanup" width="90%" />
-</p>
+**Result:**  
+A working understanding of how network traffic behaves, how it fails, and how to restore connectivity using packet-level analysis.
